@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>极简华容道</title>
+    <link rel="stylesheet" href="styles/tokens.css" />
+    <link rel="stylesheet" href="styles/app.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <header class="app-shell__header">
+        <p class="title-block__eyebrow">Minimal Klotski</p>
+        <h1 class="title-block__title">极简华容道</h1>
+        <p class="title-block__subtitle">纯网页、轻反馈、低噪音的解谜数字玩具</p>
+      </header>
+
+      <main class="app-shell__content">
+        <section class="board-section">
+          <div class="hud-card">
+            <div class="hud-card__row">
+              <div class="hud-card__group">
+                <span class="hud-card__label">关卡</span>
+                <strong id="level-name">载入中</strong>
+              </div>
+              <div class="hud-card__group">
+                <span class="hud-card__label">难度</span>
+                <strong id="level-difficulty">-</strong>
+              </div>
+              <div class="hud-card__group">
+                <span class="hud-card__label">状态</span>
+                <strong id="session-status">载入中</strong>
+              </div>
+            </div>
+            <div class="hud-card__row">
+              <div class="hud-card__group">
+                <span class="hud-card__label">步数</span>
+                <strong data-testid="move-count" id="move-count">0</strong>
+              </div>
+              <div class="hud-card__group">
+                <span class="hud-card__label">时间</span>
+                <strong data-testid="timer" id="timer">00:00</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="board-frame">
+            <div
+              class="board"
+              data-testid="board"
+              aria-label="华容道棋盘"
+              tabindex="0"
+            ></div>
+
+            <div class="overlay-stack">
+              <section data-testid="loading-state" class="overlay-card" hidden>
+                <h2>正在准备棋局</h2>
+                <p>请稍候，棋盘马上就绪。</p>
+              </section>
+
+              <section data-testid="empty-state" class="overlay-card" hidden>
+                <h2>暂无可用关卡</h2>
+                <p>当前关卡库为空，请重新加载或恢复默认数据。</p>
+                <button id="reload-empty-button" type="button">重新加载</button>
+              </section>
+
+              <section data-testid="error-state" class="overlay-card" hidden>
+                <h2>棋局加载失败</h2>
+                <p id="error-message">请稍后再试。</p>
+                <button id="reload-error-button" type="button">重试</button>
+              </section>
+
+              <section
+                data-testid="win-dialog"
+                class="overlay-card overlay-card--win"
+                hidden
+              >
+                <h2>成功脱困</h2>
+                <p id="win-summary">你完成了本局挑战。</p>
+                <button id="play-again-button" type="button">再来一局</button>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <aside class="control-panel">
+          <label class="control-field" for="level-select">
+            <span>切换关卡</span>
+            <select data-testid="level-select" id="level-select"></select>
+          </label>
+
+          <div class="control-actions">
+            <button data-testid="undo-button" id="undo-button" type="button">
+              撤销
+            </button>
+            <button data-testid="restart-button" id="restart-button" type="button">
+              重开
+            </button>
+          </div>
+
+          <div class="control-field control-field--toggle">
+            <label class="toggle" for="sound-toggle">
+              <span>音效</span>
+              <input
+                data-testid="sound-toggle"
+                id="sound-toggle"
+                type="checkbox"
+                checked
+              />
+            </label>
+            <label class="toggle" for="haptics-toggle">
+              <span>震动</span>
+              <input
+                data-testid="haptics-toggle"
+                id="haptics-toggle"
+                type="checkbox"
+                checked
+              />
+            </label>
+          </div>
+
+          <div class="control-notes">
+            <p id="control-hint">按住棋子后沿一个方向滑动并释放即可尝试移动。</p>
+          </div>
+        </aside>
+      </main>
+
+      <div id="live-region" class="live-region" aria-live="polite"></div>
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

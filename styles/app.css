@@ -1,0 +1,322 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: var(--font-stack);
+  background:
+    radial-gradient(circle at top, rgba(141, 163, 153, 0.18), transparent 38%),
+    linear-gradient(180deg, #fcfaf6, var(--bg-color));
+  color: var(--text-color);
+}
+
+body {
+  min-height: 100vh;
+}
+
+button,
+select {
+  font: inherit;
+}
+
+button:focus-visible,
+select:focus-visible,
+.board__piece:focus-visible {
+  outline: 3px solid rgba(76, 98, 85, 0.4);
+  outline-offset: 3px;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding: clamp(20px, 3vw, 40px);
+}
+
+.app-shell__header,
+.app-shell__content {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+.title-block__eyebrow {
+  margin: 0 0 var(--space-xs);
+  color: var(--accent-color);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.title-block__title {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+}
+
+.title-block__subtitle {
+  margin: var(--space-sm) 0 0;
+  color: var(--muted-color);
+  max-width: 34rem;
+}
+
+.app-shell__content {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+  align-items: start;
+}
+
+.board-section,
+.control-panel,
+.hud-card,
+.board-frame,
+.overlay-card {
+  background: var(--panel-color);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: var(--shadow-soft);
+}
+
+.board-section {
+  padding: var(--space-lg);
+  border-radius: var(--radius-xl);
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.hud-card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.hud-card__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.hud-card__group {
+  min-width: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hud-card__label {
+  font-size: 0.82rem;
+  color: var(--muted-color);
+}
+
+.board-frame {
+  position: relative;
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92),
+    rgba(239, 231, 217, 0.78)
+  );
+  min-height: 60vh;
+}
+
+.board {
+  position: relative;
+  margin: 0 auto;
+  width: calc(var(--cell-size) * var(--board-columns));
+  height: calc(var(--cell-size) * var(--board-rows));
+  max-width: 100%;
+  border-radius: calc(var(--radius-xl) - 8px);
+  border: 1px solid var(--board-border);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.65), rgba(239, 231, 217, 0.35)),
+    var(--board-color);
+  overflow: hidden;
+}
+
+.board::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(97, 88, 71, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(97, 88, 71, 0.06) 1px, transparent 1px);
+  background-size: var(--cell-size) var(--cell-size);
+  pointer-events: none;
+}
+
+.board__piece {
+  position: absolute;
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-piece);
+  color: var(--text-color);
+  cursor: pointer;
+  transition:
+    transform var(--transition-medium),
+    box-shadow var(--transition-fast),
+    opacity var(--transition-fast);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: var(--space-sm);
+  font-weight: 600;
+  text-align: left;
+  user-select: none;
+  touch-action: none;
+}
+
+.board__piece--target {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.35), transparent), var(--target-color);
+}
+
+.board__piece--general {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.32), transparent),
+    var(--general-color);
+}
+
+.board__piece--soldier {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent), var(--soldier-color);
+}
+
+.board__piece--active {
+  box-shadow: var(--shadow-pressed);
+  transform: scale(0.98);
+}
+
+.board__piece-label {
+  pointer-events: none;
+  font-size: 0.92rem;
+}
+
+.control-panel {
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.control-field {
+  display: grid;
+  gap: var(--space-sm);
+  color: var(--muted-color);
+}
+
+.control-field span {
+  font-size: 0.92rem;
+}
+
+.control-field select,
+.control-actions button,
+.toggle input {
+  accent-color: var(--accent-color);
+}
+
+.control-field select,
+.control-actions button {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(76, 98, 85, 0.14);
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--text-color);
+}
+
+.control-actions {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.control-actions button {
+  cursor: pointer;
+}
+
+.control-field--toggle {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  color: var(--text-color);
+}
+
+.control-notes {
+  color: var(--muted-color);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.overlay-stack {
+  position: absolute;
+  inset: var(--space-lg);
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.overlay-card {
+  width: min(420px, 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  text-align: center;
+}
+
+.overlay-card button {
+  margin-top: var(--space-sm);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 12px 18px;
+  background: var(--accent-color);
+  color: white;
+  cursor: pointer;
+}
+
+.live-region {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@media (max-width: 920px) {
+  .app-shell__content {
+    grid-template-columns: 1fr;
+  }
+
+  .board-frame {
+    min-height: 50vh;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    padding: 16px;
+    gap: var(--space-lg);
+  }
+
+  .board-section,
+  .control-panel {
+    padding: var(--space-md);
+  }
+
+  .board-frame {
+    padding: var(--space-md);
+  }
+}

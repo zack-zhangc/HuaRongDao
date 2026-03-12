@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.npm-cache/
+.codex/
+.specify/
+specs/
+docs/
+AGENTS.md
+playwright-report/
+test-results/
+coverage/
+package-lock.json

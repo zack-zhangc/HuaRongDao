@@ -1,0 +1,30 @@
+:root {
+  --bg-color: #f4f1eb;
+  --panel-color: rgba(255, 255, 255, 0.74);
+  --board-color: #efe7d9;
+  --board-border: rgba(97, 88, 71, 0.12);
+  --target-color: #c88c74;
+  --general-color: #8da399;
+  --soldier-color: #d9c7a6;
+  --accent-color: #4c6255;
+  --text-color: #2f3a33;
+  --muted-color: #6d736a;
+  --shadow-soft: 0 18px 40px rgba(76, 98, 85, 0.12);
+  --shadow-piece: 0 12px 24px rgba(0, 0, 0, 0.14);
+  --shadow-pressed: 0 6px 16px rgba(0, 0, 0, 0.2);
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --font-stack: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --transition-fast: 0.2s ease-out;
+  --transition-medium: 0.28s ease-out;
+  --board-columns: 4;
+  --board-rows: 5;
+  --cell-size: 76px;
+}

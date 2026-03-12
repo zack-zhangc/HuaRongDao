@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://web-test.local/contracts/level.schema.json",
+  "title": "KlotskiLevel",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "difficulty",
+    "boardWidth",
+    "boardHeight",
+    "exit",
+    "pieces"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": ["easy", "medium", "hard"]
+    },
+    "optimalMoves": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "boardWidth": {
+      "type": "integer",
+      "const": 4
+    },
+    "boardHeight": {
+      "type": "integer",
+      "const": 5
+    },
+    "exit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["row", "col", "widthCells", "heightCells"],
+      "properties": {
+        "row": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "col": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "widthCells": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "heightCells": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        }
+      }
+    },
+    "pieces": {
+      "type": "array",
+      "minItems": 1,
+      "contains": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "const": "target"
+          }
+        },
+        "required": ["role"]
+      },
+      "minContains": 1,
+      "maxContains": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "role",
+          "widthCells",
+          "heightCells",
+          "row",
+          "col"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "enum": ["target", "general", "soldier"]
+          },
+          "widthCells": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2
+          },
+          "heightCells": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2
+          },
+          "row": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4
+          },
+          "col": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3
+          },
+          "themeToken": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "properties": {
+        "pieces": {
+          "items": {
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "widthCells": {
+                      "const": 2
+                    }
+                  },
+                  "required": ["widthCells"]
+                },
+                "then": {
+                  "properties": {
+                    "col": {
+                      "maximum": 2
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "heightCells": {
+                      "const": 2
+                    }
+                  },
+                  "required": ["heightCells"]
+                },
+                "then": {
+                  "properties": {
+                    "row": {
+                      "maximum": 3
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}
