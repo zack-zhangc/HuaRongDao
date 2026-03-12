@@ -265,6 +265,7 @@ select:focus-visible,
   display: grid;
   align-items: center;
   justify-items: center;
+  pointer-events: none;
 }
 
 .overlay-card {
@@ -272,6 +273,7 @@ select:focus-visible,
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   text-align: center;
+  pointer-events: auto;
 }
 
 .overlay-card button {
