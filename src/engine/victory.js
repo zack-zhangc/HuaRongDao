@@ -27,5 +27,12 @@ export function isWinningState(pieces, exit) {
 }
 
 export function getVictorySummary(levelName, moveCount, elapsedMs) {
-  return `${levelName} 通关，用时 ${Math.floor(elapsedMs / 1000)} 秒，共 ${moveCount} 步。`;
+  return `${levelName} 通关，用时 ${formatDuration(elapsedMs)}，共 ${moveCount} 步。`;
+}
+
+function formatDuration(elapsedMs) {
+  const totalSeconds = Math.floor(elapsedMs / 1000);
+  const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+  const seconds = String(totalSeconds % 60).padStart(2, '0');
+  return `${minutes}:${seconds}`;
 }

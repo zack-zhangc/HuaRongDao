@@ -2,12 +2,19 @@ import { BOARD_DIMENSIONS } from '../engine/board-state.js';
 
 export function createBoardRenderer(boardElement) {
   function updateBoardSize() {
-    const maxWidth = Math.min(window.innerWidth * 0.78, 520);
-    const maxHeight = Math.min(window.innerHeight * 0.66, 680);
+    const boardStageElement = boardElement.closest('.board-stage');
+    const boardSceneElement = boardElement.closest('.board-scene');
+    const availableWidth = Math.max(
+      (boardStageElement?.clientWidth ?? window.innerWidth) - 56,
+      208
+    );
+    const maxWidth = Math.min(availableWidth, 560);
+    const maxHeight = Math.min(window.innerHeight * 0.58, 720);
     const cellSize = Math.floor(
       Math.min(maxWidth / BOARD_DIMENSIONS.columns, maxHeight / BOARD_DIMENSIONS.rows)
     );
-    boardElement.style.setProperty('--cell-size', `${Math.max(cellSize, 56)}px`);
+    const nextCellSize = `${Math.max(Math.min(cellSize, 96), 52)}px`;
+    (boardSceneElement ?? boardElement).style.setProperty('--cell-size', nextCellSize);
   }
 
   function render(session) {
@@ -22,10 +29,12 @@ export function createBoardRenderer(boardElement) {
         button.classList.add('board__piece--active');
       }
       button.setAttribute('data-piece-id', piece.id);
+      button.setAttribute('data-piece-role', piece.role);
       button.setAttribute(
         'aria-label',
         `${getRoleLabel(piece.role)}，位于 ${piece.row + 1} 行 ${piece.col + 1} 列`
       );
+      button.style.zIndex = String(piece.row + piece.heightCells);
       button.style.width = `calc(var(--cell-size) * ${piece.widthCells} - 8px)`;
       button.style.height = `calc(var(--cell-size) * ${piece.heightCells} - 8px)`;
       button.style.left = `calc(var(--cell-size) * ${piece.col} + 4px)`;
