@@ -8,7 +8,7 @@ export function createHud({
   return {
     render(session) {
       levelNameElement.textContent = session.levelName;
-      levelDifficultyElement.textContent = session.difficulty;
+      levelDifficultyElement.textContent = mapDifficultyLabel(session.difficulty);
       moveCountElement.textContent = String(session.moveCount);
       timerElement.textContent = formatDuration(session.elapsedMs);
       statusElement.textContent = mapStatusLabel(session.status);
@@ -37,5 +37,18 @@ function mapStatusLabel(status) {
       return '加载失败';
     default:
       return '载入中';
+  }
+}
+
+function mapDifficultyLabel(difficulty) {
+  switch (difficulty) {
+    case 'easy':
+      return '简单';
+    case 'medium':
+      return '中等';
+    case 'hard':
+      return '困难';
+    default:
+      return difficulty;
   }
 }

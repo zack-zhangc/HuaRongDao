@@ -20,6 +20,7 @@ import { createBoardRenderer } from './ui/board-renderer.js';
 import { createHud } from './ui/hud.js';
 import { createOverlays } from './ui/overlays.js';
 import { createSettingsPanel } from './ui/settings-panel.js';
+import { createThemeController } from './ui/theme-controller.js';
 
 const metrics = {
   loadStartedAt: performance.now(),
@@ -40,6 +41,7 @@ const undoButton = document.querySelector('[data-testid="undo-button"]');
 const restartButton = document.querySelector('[data-testid="restart-button"]');
 const soundToggle = document.querySelector('[data-testid="sound-toggle"]');
 const hapticsToggle = document.querySelector('[data-testid="haptics-toggle"]');
+const themeButtons = Array.from(document.querySelectorAll('[data-theme-option]'));
 const hintElement = document.querySelector('#control-hint');
 const liveRegion = document.querySelector('#live-region');
 const loadingElement = document.querySelector('[data-testid="loading-state"]');
@@ -100,6 +102,9 @@ const settingsPanel = createSettingsPanel({
   onRestart: handleRestart,
   onSoundToggle: handleSoundToggle,
   onHapticsToggle: handleHapticsToggle,
+});
+const themeController = createThemeController({
+  themeButtons,
 });
 
 createGestureController({
@@ -263,6 +268,7 @@ function boot() {
   metrics.readyAt = performance.now();
   globalThis['__app'] = {
     getSession: () => structuredClone(session),
+    getTheme: () => themeController.getTheme(),
   };
   globalThis['__appMetrics'] = metrics;
   render();

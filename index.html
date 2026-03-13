@@ -1,127 +1,223 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      (() => {
+        try {
+          const storedTheme = localStorage.getItem('minimal-klotski-theme');
+          const theme =
+            storedTheme === 'dark' || storedTheme === 'light' ? storedTheme : 'light';
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch {
+          document.documentElement.dataset.theme = 'light';
+          document.documentElement.style.colorScheme = 'light';
+        }
+      })();
+    </script>
     <title>极简华容道</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap"
+    />
     <link rel="stylesheet" href="styles/tokens.css" />
     <link rel="stylesheet" href="styles/app.css" />
   </head>
   <body>
     <div id="app" class="app-shell">
-      <header class="app-shell__header">
-        <p class="title-block__eyebrow">Minimal Klotski</p>
-        <h1 class="title-block__title">极简华容道</h1>
-        <p class="title-block__subtitle">纯网页、轻反馈、低噪音的解谜数字玩具</p>
+      <header class="app-shell__header hero-panel">
+        <div class="hero-panel__copy">
+          <p class="title-block__eyebrow">Minimal Klotski</p>
+          <h1 class="title-block__title">极简华容道</h1>
+          <p class="title-block__subtitle">
+            把传统滑块谜题重做成一块安静、清晰、触感明确的数字棋盘。
+            拖动棋子，为曹操打开底部出口。
+          </p>
+          <div class="title-block__meta" aria-label="界面特性">
+            <span class="pill">纯网页运行</span>
+            <span class="pill">双主题界面</span>
+            <span class="pill">手势优先</span>
+          </div>
+        </div>
+
+        <div class="hero-panel__side">
+          <section class="theme-panel" aria-labelledby="theme-panel-title">
+            <p id="theme-panel-title" class="theme-panel__label">界面风格</p>
+            <div class="theme-switch" role="group" aria-label="切换界面主题">
+              <button
+                data-testid="theme-light-button"
+                class="theme-switch__button"
+                data-theme-option="light"
+                type="button"
+                aria-pressed="true"
+              >
+                浅色
+              </button>
+              <button
+                data-testid="theme-dark-button"
+                class="theme-switch__button"
+                data-theme-option="dark"
+                type="button"
+                aria-pressed="false"
+              >
+                暗色
+              </button>
+            </div>
+            <p class="theme-panel__hint">浅色适合白天，暗色适合长时间专注。</p>
+          </section>
+
+          <section class="hero-note" aria-labelledby="hero-note-title">
+            <p id="hero-note-title" class="micro-tag">目标</p>
+            <h2 class="hero-note__title">让曹操抵达底部中央出口</h2>
+            <p class="hero-note__text">
+              保持视线聚焦在棋盘底部通路，优先清理中央两格的落点。
+            </p>
+          </section>
+        </div>
       </header>
 
       <main class="app-shell__content">
-        <section class="board-section">
-          <div class="hud-card">
-            <div class="hud-card__row">
-              <div class="hud-card__group">
-                <span class="hud-card__label">关卡</span>
-                <strong id="level-name">载入中</strong>
-              </div>
-              <div class="hud-card__group">
-                <span class="hud-card__label">难度</span>
-                <strong id="level-difficulty">-</strong>
-              </div>
-              <div class="hud-card__group">
-                <span class="hud-card__label">状态</span>
-                <strong id="session-status">载入中</strong>
-              </div>
-            </div>
-            <div class="hud-card__row">
-              <div class="hud-card__group">
-                <span class="hud-card__label">步数</span>
-                <strong data-testid="move-count" id="move-count">0</strong>
-              </div>
-              <div class="hud-card__group">
-                <span class="hud-card__label">时间</span>
-                <strong data-testid="timer" id="timer">00:00</strong>
-              </div>
-            </div>
+        <section class="experience-stage" aria-label="棋局体验区">
+          <div class="hud-grid">
+            <article class="stat-card">
+              <span class="stat-card__label">当前关卡</span>
+              <strong id="level-name">载入中</strong>
+              <span id="level-difficulty" class="stat-card__meta">-</span>
+            </article>
+
+            <article class="stat-card">
+              <span class="stat-card__label">局面状态</span>
+              <strong id="session-status">载入中</strong>
+              <span class="stat-card__meta">沿单一方向滑动触发移动</span>
+            </article>
+
+            <article class="stat-card stat-card--accent">
+              <span class="stat-card__label">步数</span>
+              <strong data-testid="move-count" id="move-count">0</strong>
+              <span class="stat-card__meta">越少越接近最佳路径</span>
+            </article>
+
+            <article class="stat-card">
+              <span class="stat-card__label">计时</span>
+              <strong data-testid="timer" id="timer">00:00</strong>
+              <span class="stat-card__meta">从本局开始持续累计</span>
+            </article>
           </div>
 
           <div class="board-frame">
-            <div
-              class="board"
-              data-testid="board"
-              aria-label="华容道棋盘"
-              tabindex="0"
-            ></div>
+            <div class="board-frame__header">
+              <div>
+                <span class="micro-tag">棋盘</span>
+                <h2 class="board-frame__title">把出口始终留在视线中央</h2>
+              </div>
 
-            <div class="overlay-stack">
-              <section data-testid="loading-state" class="overlay-card" hidden>
-                <h2>正在准备棋局</h2>
-                <p>请稍候，棋盘马上就绪。</p>
-              </section>
+              <div class="legend" aria-label="棋子类型说明">
+                <span class="legend__chip legend__chip--target">曹操</span>
+                <span class="legend__chip legend__chip--general">武将</span>
+                <span class="legend__chip legend__chip--soldier">小兵</span>
+              </div>
+            </div>
 
-              <section data-testid="empty-state" class="overlay-card" hidden>
-                <h2>暂无可用关卡</h2>
-                <p>当前关卡库为空，请重新加载或恢复默认数据。</p>
-                <button id="reload-empty-button" type="button">重新加载</button>
-              </section>
+            <div class="board-stage">
+              <div class="board-scene">
+                <div class="board-scene__exit" aria-hidden="true">
+                  <span class="board-scene__exit-label">出口</span>
+                </div>
 
-              <section data-testid="error-state" class="overlay-card" hidden>
-                <h2>棋局加载失败</h2>
-                <p id="error-message">请稍后再试。</p>
-                <button id="reload-error-button" type="button">重试</button>
-              </section>
+                <div
+                  class="board"
+                  data-testid="board"
+                  aria-label="华容道棋盘"
+                  tabindex="0"
+                ></div>
 
-              <section
-                data-testid="win-dialog"
-                class="overlay-card overlay-card--win"
-                hidden
-              >
-                <h2>成功脱困</h2>
-                <p id="win-summary">你完成了本局挑战。</p>
-                <button id="play-again-button" type="button">再来一局</button>
-              </section>
+                <div class="overlay-stack">
+                  <section data-testid="loading-state" class="overlay-card" hidden>
+                    <h2>正在准备棋局</h2>
+                    <p>请稍候，棋盘马上就绪。</p>
+                  </section>
+
+                  <section data-testid="empty-state" class="overlay-card" hidden>
+                    <h2>暂无可用关卡</h2>
+                    <p>当前关卡库为空，请重新加载或恢复默认数据。</p>
+                    <button id="reload-empty-button" type="button">重新加载</button>
+                  </section>
+
+                  <section data-testid="error-state" class="overlay-card" hidden>
+                    <h2>棋局加载失败</h2>
+                    <p id="error-message">请稍后再试。</p>
+                    <button id="reload-error-button" type="button">重试</button>
+                  </section>
+
+                  <section
+                    data-testid="win-dialog"
+                    class="overlay-card overlay-card--win"
+                    hidden
+                  >
+                    <h2>成功脱困</h2>
+                    <p id="win-summary">你完成了本局挑战。</p>
+                    <button id="play-again-button" type="button">再来一局</button>
+                  </section>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        <aside class="control-panel">
-          <label class="control-field" for="level-select">
-            <span>切换关卡</span>
-            <select data-testid="level-select" id="level-select"></select>
-          </label>
-
-          <div class="control-actions">
-            <button data-testid="undo-button" id="undo-button" type="button">
-              撤销
-            </button>
-            <button data-testid="restart-button" id="restart-button" type="button">
-              重开
-            </button>
-          </div>
-
-          <div class="control-field control-field--toggle">
-            <label class="toggle" for="sound-toggle">
-              <span>音效</span>
-              <input
-                data-testid="sound-toggle"
-                id="sound-toggle"
-                type="checkbox"
-                checked
-              />
+        <aside class="control-panel" aria-label="控制面板">
+          <section class="panel-card">
+            <p class="panel-card__eyebrow">局面控制</p>
+            <label class="control-field" for="level-select">
+              <span>切换关卡</span>
+              <select data-testid="level-select" id="level-select"></select>
             </label>
-            <label class="toggle" for="haptics-toggle">
-              <span>震动</span>
-              <input
-                data-testid="haptics-toggle"
-                id="haptics-toggle"
-                type="checkbox"
-                checked
-              />
-            </label>
-          </div>
+          </section>
 
-          <div class="control-notes">
+          <section class="panel-card">
+            <p class="panel-card__eyebrow">操作</p>
+            <div class="control-actions">
+              <button data-testid="undo-button" id="undo-button" type="button">
+                撤销
+              </button>
+              <button data-testid="restart-button" id="restart-button" type="button">
+                重开
+              </button>
+            </div>
+          </section>
+
+          <section class="panel-card">
+            <p class="panel-card__eyebrow">反馈设置</p>
+            <div class="control-field control-field--toggle">
+              <label class="toggle" for="sound-toggle">
+                <span>音效</span>
+                <input
+                  data-testid="sound-toggle"
+                  id="sound-toggle"
+                  type="checkbox"
+                  checked
+                />
+              </label>
+              <label class="toggle" for="haptics-toggle">
+                <span>震动</span>
+                <input
+                  data-testid="haptics-toggle"
+                  id="haptics-toggle"
+                  type="checkbox"
+                  checked
+                />
+              </label>
+            </div>
+          </section>
+
+          <section class="panel-card panel-card--notes">
+            <p class="panel-card__eyebrow">上手提示</p>
             <p id="control-hint">按住棋子后沿一个方向滑动并释放即可尝试移动。</p>
-          </div>
+          </section>
         </aside>
       </main>
 
