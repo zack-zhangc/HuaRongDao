@@ -52,8 +52,11 @@ body::after {
 
 button,
 select,
-input {
+input,
+.board,
+.board__piece {
   font: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button,
@@ -66,8 +69,12 @@ button:focus-visible,
 select:focus-visible,
 input:focus-visible,
 .board__piece:focus-visible {
-  outline: 3px solid var(--outline-color);
-  outline-offset: 3px;
+  outline: none;
+}
+
+.board:focus,
+.board:focus-visible {
+  outline: none;
 }
 
 button,
@@ -225,6 +232,11 @@ select,
   cursor: pointer;
 }
 
+.theme-switch__button:focus-visible {
+  border-color: var(--line-strong);
+  box-shadow: 0 0 0 3px var(--outline-color);
+}
+
 .theme-switch__button[data-active='true'] {
   background: linear-gradient(
     135deg,
@@ -234,6 +246,12 @@ select,
   border-color: transparent;
   color: #fff7f1;
   box-shadow: 0 14px 24px var(--accent-glow);
+}
+
+.theme-switch__button[data-active='true']:focus-visible {
+  box-shadow:
+    0 0 0 3px var(--outline-color),
+    0 14px 24px var(--accent-glow);
 }
 
 .theme-panel__hint,
@@ -517,6 +535,18 @@ select,
   box-shadow: var(--shadow-pressed);
 }
 
+.board__piece:focus-visible {
+  box-shadow:
+    0 0 0 3px var(--outline-color),
+    var(--shadow-piece);
+}
+
+.board__piece--active:focus-visible {
+  box-shadow:
+    0 0 0 3px var(--outline-color),
+    var(--shadow-pressed);
+}
+
 .board__piece-label {
   position: relative;
   z-index: 1;
@@ -576,13 +606,21 @@ select,
 }
 
 .control-actions button:hover,
-.control-actions button:focus-visible,
 .overlay-card button:hover,
-.overlay-card button:focus-visible,
 .control-field select:hover,
 .toggle:hover {
   border-color: var(--line-strong);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.control-actions button:focus-visible,
+.overlay-card button:focus-visible,
+.control-field select:focus-visible,
+.toggle:focus-within {
+  border-color: var(--line-strong);
+  box-shadow:
+    0 0 0 3px var(--outline-color),
+    0 12px 24px rgba(0, 0, 0, 0.08);
 }
 
 .control-actions button:last-child,
