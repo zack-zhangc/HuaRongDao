@@ -3,6 +3,17 @@ export const UI_THEMES = Object.freeze({
   dark: 'dark',
 });
 
+export const THEME_METADATA = Object.freeze({
+  [UI_THEMES.light]: Object.freeze({
+    title: '极简华容道 - 原木版 | Minimal Klotski Wood Edition',
+    editionLabel: '原木版',
+  }),
+  [UI_THEMES.dark]: Object.freeze({
+    title: '极简华容道 - 尊享暗木版 | Minimal Klotski Dark Edition',
+    editionLabel: '尊享暗木版',
+  }),
+});
+
 const THEME_STORAGE_KEY = 'minimal-klotski-theme';
 
 function isTheme(value) {
@@ -26,6 +37,10 @@ function persistTheme(storage, theme) {
   }
 }
 
+function resolveThemeMetadata(themeMetadata, theme) {
+  return themeMetadata[theme] ?? themeMetadata[UI_THEMES.light];
+}
+
 export function resolveInitialTheme(storage = globalThis.localStorage) {
   return readStoredTheme(storage) ?? UI_THEMES.light;
 }
@@ -34,6 +49,7 @@ export function createThemeController({
   rootElement = document.documentElement,
   storage = globalThis.localStorage,
   themeButtons = [],
+  themeMetadata = THEME_METADATA,
 } = {}) {
   const buttons = Array.from(themeButtons);
   let currentTheme = resolveInitialTheme(storage);
@@ -43,9 +59,11 @@ export function createThemeController({
       return;
     }
 
+    const metadata = resolveThemeMetadata(themeMetadata, theme);
     currentTheme = theme;
     rootElement.dataset.theme = theme;
     rootElement.style.colorScheme = theme;
+    document.title = metadata.title;
     persistTheme(storage, theme);
 
     for (const button of buttons) {
