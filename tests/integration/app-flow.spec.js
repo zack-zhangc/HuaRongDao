@@ -22,11 +22,19 @@ test('supports a full game flow with theme switching and reset controls', async 
   await expect(page.getByTestId('board')).toBeVisible();
 
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page).toHaveTitle('极简华容道 - 原木版 | Minimal Klotski Wood Edition');
+
   await page.getByTestId('theme-dark-button').click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page).toHaveTitle(
+    '极简华容道 - 尊享暗木版 | Minimal Klotski Dark Edition'
+  );
 
   await page.reload();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page).toHaveTitle(
+    '极简华容道 - 尊享暗木版 | Minimal Klotski Dark Edition'
+  );
 
   const target = page.locator('[data-piece-id="target"]');
   await swipe(target, page, 80, 0);
@@ -46,4 +54,5 @@ test('supports a full game flow with theme switching and reset controls', async 
 
   await page.getByTestId('theme-light-button').click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page).toHaveTitle('极简华容道 - 原木版 | Minimal Klotski Wood Edition');
 });
